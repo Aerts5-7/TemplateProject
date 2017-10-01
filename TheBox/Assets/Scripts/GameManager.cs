@@ -8,14 +8,14 @@ public class GameManager : MonoBehaviour {
 	/***************************/
 	/*	Constant area          */
 	/***************************/
-	public const int WALL_FRONT	= 1;		//画面転換:前
-	public const int WALL_RIGHT	= 2;		//画面転換:右
-	public const int WALL_BACK	= 3;		//画面転換:後
-	public const int WALL_LEFT	= 4;		//画面転換:左
-	public const int COLOR_GREEN	= 0;	//色転換:緑
-	public const int COLOR_RED		= 1;	//色転換:赤
-	public const int COLOR_BLUE		= 2;	//色転換:青
-	public const int COLOR_WHITE	= 3;	//色転換:白
+	public const byte WALL_FRONT	= 1;	//画面転換:前
+	public const byte WALL_RIGHT	= 2;	//画面転換:右
+	public const byte WALL_BACK		= 3;	//画面転換:後
+	public const byte WALL_LEFT		= 4;	//画面転換:左
+	public const byte COLOR_GREEN	= 0;	//色転換:緑
+	public const byte COLOR_RED		= 1;	//色転換:赤
+	public const byte COLOR_BLUE	= 2;	//色転換:青
+	public const byte COLOR_WHITE	= 3;	//色転換:白
 
 	/***************************/
 	/*	Public Variable area   */
@@ -32,13 +32,14 @@ public class GameManager : MonoBehaviour {
 	/****************************/
 	/*	Private Variable area   */
 	/****************************/
-	private int wallNo;						//画面転換変数
+	private byte wallNo;						//画面転換変数
 	private bool doesHaveHammer;			//トンカチを持っているか？
 	private int[] buttonColor = new int[3];	//金庫のボタン
 
 	// Use this for initialization
 	void Start () {
 		wallNo = WALL_FRONT;
+		doesHaveHammer = false;
 
 		buttonColor [0] = COLOR_GREEN;	//ボタン1の色は「緑」
 		buttonColor [1] = COLOR_RED;	//ボタン2の色は「赤」
@@ -120,8 +121,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//金庫のボタンの色を変更
-	void ChangeButtonColor(int buttonNo){
+	void ChangeButtonColor(byte buttonNo){
 		buttonColor [buttonNo]++;
-		//ここまで(P.162)
+
+		//「白」の時にボタンを押したら「緑」に
+		if (buttonColor [buttonNo] > COLOR_WHITE) {
+			buttonColor [buttonNo] = COLOR_GREEN;
+		}
+		//ボタンの画像を変更
+		buttonLamp [buttonNo].GetComponent<Image> ().sprite =
+			buttonPicture [buttonColor [buttonNo]];
 	}
 }
